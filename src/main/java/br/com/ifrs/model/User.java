@@ -5,26 +5,28 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 public class User extends PanacheEntity {
-    @NotEmpty
-    private String name;
-    @ManyToMany(cascade = ALL)
-//    @JoinTable(name="CHANNEL_USER",
-//                joinColumns = {@JoinColumn(name = "CHANNEL_ID")},
-//                inverseJoinColumns = {@JoinColumn(name = "USER_ID")})
-    private ArrayList<Channel> channels;
-    @OneToMany(cascade = ALL)
-    @JoinColumn(name="id")
-    private ArrayList<Message> messages;
 
-    public User(){}
-    public User(ArrayList<Channel> channels, ArrayList<Message> messages) {
-        this.channels = channels;
-        this.messages = messages;
+    private String name;
+
+    @ManyToMany(cascade = ALL)
+    @JoinTable(name="CHANNEL_USER",
+                joinColumns = {@JoinColumn(name = "channel_id")},
+                inverseJoinColumns = {@JoinColumn(name = "users_id")})
+    private List<Channel> channels = new ArrayList<>();
+    @OneToMany(cascade = ALL)
+    @JoinColumn(name="user_id")
+    private List<Message> messages = new ArrayList<>();
+
+    public User() {}
+
+    public User(String name) {
+        this.name = name;
     }
 
     public long getId() {
@@ -43,19 +45,20 @@ public class User extends PanacheEntity {
         this.name = name;
     }
 
-    public ArrayList<Channel> getChannels() {
-        return channels;
+    public void addChannel(Channel channel) {
+        this.channels.add(channel);
     }
 
-    public void setChannels(ArrayList<Channel> channels) {
-        this.channels = channels;
+    public void removeChannel(Channel channel) {
+        this.channels.remove(channel);
     }
 
-    public ArrayList<Message> getMessages() {
-        return messages;
+    public void addMessage(Message message) {
+        this.messages.add(message);
     }
 
-    public void setMessages(ArrayList<Message> messages) {
-        this.messages = messages;
+    public void removeMessage(Message message) {
+        this.messages.remove(message);
     }
+
 }
