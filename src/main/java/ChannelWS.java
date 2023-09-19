@@ -32,9 +32,11 @@ public class ChannelWS {
         if (user == null)
             throw new BadRequestException("User not found");
 
+        channel.getUsers().size();
         channel.addUser(user);
         user.addChannel(channel);
 
+        channel.persist();
         user.persist();
 
         return user;
@@ -45,5 +47,17 @@ public class ChannelWS {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Channel> list() {
         return Channel.listAll();
+    }
+
+    @GET
+    @Path("/list/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<User> listMembers(@PathParam("id") Long id) {
+        Channel channel = Channel.findById(id);
+        if (channel == null)
+            throw new NotFoundException("Channel not found");
+
+        List<User> users = channel.getUsers();
+        return users;
     }
 }

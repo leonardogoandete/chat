@@ -1,9 +1,7 @@
+import br.com.ifrs.model.Channel;
 import br.com.ifrs.model.User;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 
 import java.util.List;
@@ -41,5 +39,19 @@ public class UserWS {
     public User list(@PathParam("id") Long id) {
         // 4 - O método do Panache `findById` recupera um objeto da classe User.
         return User.findById(id);
+    }
+
+    @GET
+    @Path("/list/{id}/channels")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Channel> listChannels(@PathParam("id") Long id) {
+        User user = User.findById(id);
+        if (user == null)
+            throw new NotFoundException("User not found");
+
+        user.getChannels().size();
+
+        List<Channel> channels = user.getChannels();
+        return channels;
     }
 }

@@ -1,5 +1,6 @@
 package br.com.ifrs.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -14,10 +15,11 @@ public class User extends PanacheEntity {
 
     private String name;
 
-    @ManyToMany(cascade = ALL)
+    @ManyToMany(cascade = ALL, fetch = FetchType.EAGER)
     @JoinTable(name="CHANNEL_USER",
                 joinColumns = {@JoinColumn(name = "channel_id")},
                 inverseJoinColumns = {@JoinColumn(name = "users_id")})
+    @JsonManagedReference
     private List<Channel> channels = new ArrayList<>();
     @OneToMany(cascade = ALL)
     @JoinColumn(name="user_id")
@@ -51,6 +53,10 @@ public class User extends PanacheEntity {
 
     public void removeChannel(Channel channel) {
         this.channels.remove(channel);
+    }
+
+    public List<Channel> getChannels() {
+        return channels;
     }
 
     public void addMessage(Message message) {

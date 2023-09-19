@@ -1,5 +1,6 @@
 package br.com.ifrs.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -13,7 +14,8 @@ import static jakarta.persistence.CascadeType.ALL;
 public class Channel extends PanacheEntity {
     private String hash;
 
-    @ManyToMany(mappedBy="channels", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy="channels", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonBackReference
     private List<User> users = new ArrayList<>();
 
     @OneToMany(cascade = ALL)
@@ -39,6 +41,10 @@ public class Channel extends PanacheEntity {
 
     public void removeUser(User user) {
         this.users.remove(user);
+    }
+
+    public List<User> getUsers() {
+        return users;
     }
 
     public void addMessage(Message message) {
