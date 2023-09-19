@@ -27,7 +27,14 @@ public class User extends PanacheEntity {
 
     public User() {}
 
-    public User(String name) {
+    public User(String name, Message message, Channel channel) {
+        this.messages.add(message);
+        this.channels.add(channel);
+        this.name = name;
+    }
+
+    public User(String name, Message message) {
+        this.messages.add(message);
         this.name = name;
     }
 

@@ -20,29 +20,6 @@ public class ChannelWS {
     }
 
     @GET
-    @Path("/add/{idChannel}/{idUser}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public User add(@PathParam("idChannel") Long idChannel, @PathParam("idUser") Long idUser) {
-
-        Channel channel = Channel.findById(idChannel);
-        if (channel == null)
-            throw new BadRequestException("Channel not found");
-
-        User user = User.findById(idUser);
-        if (user == null)
-            throw new BadRequestException("User not found");
-
-        channel.getUsers().size();
-        channel.addUser(user);
-        user.addChannel(channel);
-
-        channel.persist();
-        user.persist();
-
-        return user;
-    }
-
-    @GET
     @Path("/list")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Channel> list() {
@@ -52,12 +29,10 @@ public class ChannelWS {
     @GET
     @Path("/list/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<User> listMembers(@PathParam("id") Long id) {
+    public Channel listMembers(@PathParam("id") Long id) {
         Channel channel = Channel.findById(id);
         if (channel == null)
             throw new NotFoundException("Channel not found");
-
-        List<User> users = channel.getUsers();
-        return users;
+        return channel;
     }
 }

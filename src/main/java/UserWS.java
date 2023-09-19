@@ -38,20 +38,9 @@ public class UserWS {
     @Transactional
     public User list(@PathParam("id") Long id) {
         // 4 - O método do Panache `findById` recupera um objeto da classe User.
-        return User.findById(id);
-    }
-
-    @GET
-    @Path("/list/{id}/channels")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Channel> listChannels(@PathParam("id") Long id) {
         User user = User.findById(id);
         if (user == null)
             throw new NotFoundException("User not found");
-
-        user.getChannels().size();
-
-        List<Channel> channels = user.getChannels();
-        return channels;
+        return user;
     }
 }

@@ -23,10 +23,17 @@ public class Channel extends PanacheEntity {
     private List<Message> messages = new ArrayList<>();
 
     public Channel() {}
-    public Channel(String hash) {
+
+    public Channel(Message message, String hash) {
+        this.messages.add(message);
         this.hash = hash;
     }
 
+    public Channel(User user, Message message, String hash) {
+        this.users.add(user);
+        this.messages.add(message);
+        this.hash = hash;
+    }
     public String getHash() {
         return hash;
     }
